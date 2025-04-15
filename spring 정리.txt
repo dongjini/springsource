@@ -4,12 +4,14 @@
      1) spring framework : 웹 개발할 때 주로 사용 / 설정 작업 많음 / 
      2) spring boot : spring framework 를 간편화 시킨 버전
 
+* a 태그에서 hre="" 대신 th:href="" 를 사용한다 (내부망에서는 괜찮지만 나중에 서버를 이용할때 문제가 발생 할 수 있기 때문)
+
 
 프로젝트 생성 시
      1. 빌드 툴 설정
-     build : 프로젝트 생성, 라이브러리 설정, 컴파일, 테스트, 패키지 작성, 배포
-         1) gradle : text 기반, 후발주자(maven 개선)
-         2) maven : XML 기반, 
+         build : 프로젝트 생성, 라이브러리 설정, 컴파일, 테스트, 패키지 작성, 배포
+             1) gradle : text 기반, 후발주자(maven 개선)
+             2) maven : XML 기반, 
 
 
      2. spring boot version 선택 (버전마다 코드가 조금식 다름, 버전 중요) -> 지금 사용중인 ver 3.4.4
@@ -46,20 +48,20 @@
      2) 경로 임의로 생성 
          http://localhost:8080/ ==> Controller 파일의 메소드와 매핑
 
-         uri 설계
-         ex) 게시판 개발
-             게시글 작성 : /board/create
-             게시글 목록 : /board/list
-             게시글 조회 : /board/read
-             게시글 수정 : /board/update
+         - uri 설계
+             ex) 게시판 개발
+                 게시글 작성 : /board/create
+                 게시글 목록 : /board/list
+                 게시글 조회 : /board/read
+                 게시글 수정 : /board/update
 
          @RequestMapping("/board")
          public String method() {
          @GetMapping("/create")
             return "info";
          }
-         String 일 때
-         http://localhost:8080/board/create -> 브라우저에서 요청 => 컨트롤러 응답 => templates 찾기 (templates / return 값 찾기)
+         - String 일 때
+             http://localhost:8080/board/create -> 브라우저에서 요청 => 컨트롤러 응답 => templates 찾기 (templates / return 값 찾기)
              => templates / info.html 작성
 
 
@@ -70,3 +72,71 @@
          void 일 때
          http://localhost:8080/board/update -> 브라우저에서 요청 => 컨트롤러 응답 => templates 찾기 (templates / board / update)
              => templates / board / update.html 작성
+
+     3) 내장 서버 : Tomcat(설치 후 사용 - 스프링부트를 사용한다면 내장되어 있음)
+         http://localhost:8080/ : Tomcat 서버 구동 시 기본경로
+
+         브라우저를 통해 http, https 프로토콜에 응답하는 서버 : SW웹서버(apache, NginX)  
+         WAS(Web Application Server) : 웹서버 + 자바해석 => Tomcat
+
+     * a 태그로 들어가는 방식 -> get 방식
+         post 들어오면 post매핑을 해야함.
+
+     4) 오류발생
+         - 404 : 컨트롤러 경로 확인
+         - 405 : 컨트롤러 경로 + 매핑방식 확인
+
+     * 자바에 있는 값을 보여주는 방법 
+         (1) <div id="result" th:text="${result}"> => th:text="${result} : 자바 코드를 화면단에 출력화기 위한 코드
+         (2) <!-- command 객체명 : 첫 문자만 소문자로 바꿔서  -->
+             <li>아이디 : [[${loginDTO?.userid}]]</li>
+             <li>비밀번호 : [[${loginDTO?.password}]]</li>
+
+     5) 사용자 입력값 가져오기
+         (1) 변수 이용 : 타입 지정 가능, 변수명은 form 요소의 이름과 일치
+         (2) 커맨드(DTO) 객체 이용 : 타입 지정 가능, 변수명은 form 요소의 이름과 일치
+                                     커맨드 객체 사용시 장점은 template 페이지까지 입력값이 유지
+         (3) HttpServleRequest 이용
+                     HttpServleRequest request : 사용자의 정보 및 서버 쪽 정보 추출
+
+
+     6) @ModelAttribute 
+         - 별칭
+         - model.addAttribute("num1", num1) == @ModelAttribute("num1") : template 페이지에서 값을 유지하고 싶다면
+
+     7) RedirectAttributes : 컨트롤러에서 움직이는 방식이 redirect 일 때 사용 / 움직이면서 특정 값을 가지고 가고 싶을 때 사용
+                 - rttr.addAttribute("userid", memberDTO.getUserid()); 
+                   rttr.addAttribute("userid", "10");   =>  ?userid=10  => 템플릿 $[param.userid]
+
+                 - rttr.addFlashAttribute("password", memberDTO.getPassword());
+                   rttr.addFlashAttribute("password", "12"); => session 객체에 담는것과 같은 방식 => 템플릿 $[password]
+     
+         * // 로그인 페이지로 이동
+             - return "redirect:/member/login";
+                     redirect + 주소를 주면 원하는 페이지로 리턴 됨.
+
+     8) 데이터 유지하기 
+         - login.html 입력값 => 컨트롤러 => logout.html까지 입력값 유지를 하고싶다면?
+             - foward 방식 : 커맨드 객체, ModelAttribute( or @ModelAttribute), Model
+             - redirect 방식 : RedirectiAttributes 이용
+             
+         - login.html 입력값   => 컨트롤러 => 모든 페이지에서 입력값 유지를 하고싶다면?
+             - 세션(로그인) : 값을 서버쪽에 저장함(객체 형태로 담는 것 가능)
+                      HttpSession 을 이용해 저장 => 필요없는 경우 제거 or 현재 세션이 유지되고 있는 브라우저를 닫으면 종료됨
+             - 쿠키 : 값을 클라이언트 브라우저로 전송 후 저장
+
+         - login.html 입력값 => 컨트롤러 => 다른 페이지에서 입력값 소멸?
+             - 컨트롤러에서 변수로 받아오는 경우 입력값은 소멸됨.
+
+         * 어느 페이지로(template) 이동을 하던지 간에 name 유지시키고 싶다면
+             커맨드 객체, ModelAttribute( or @ModelAttribute)
+
+         * redirect 로 움직이는데 값 유지하고 싶다면?
+             rttr.addAttribute("name", name);
+             rttr.addFlashAttribute("name", name);
+             return "redirect:/board/list";
+
+
+*  <!-- 리스트 출력 -->
+    <ul>
+      <li th:each=" dto : ${list}" th:text="${dto}"></li>
