@@ -200,8 +200,28 @@
                          -> create sequence student_seq start with 1 increment by 1
              ----------------------------------------------------------------------------------------------
 
+
+        * @Column(name = "sname", length = 100, nullable = false, unique = true)
+          @Column(name = "sname", columnDefinition = "varchar2(20) not null unique")
+                -> sname varchar2(20) not null unique
+
+        * 날짜 어노테이션
+             org.hibernate 제공
+             @CreationTimestamp : 데이터 삽입 시 자동으로 현재 시스템 날짜 시간 삽입
+             @UpdateTimestamp : 데이터 삽입 + 수정시 자동으로 현재 날짜 시간 삽입
+
+             org.springframework.data 제동
+             @CreatedDate
+             @LastModifiedDate
+
+             + 설정작업 필요
+                 main이 있는 클래스에 @EnableJpaAuditing 부착
+                 Entity 클래스에 @EntityListeners(value = AuditingEntityListener.class) 부착
+
+
 * JPA 
      - ORM(Object Relational Mapping) : 데이터베이스와 객체지향을 한 번에 처리하기 위한 개념
      - Hibernate : jpa 스펙을 구현해 낸 구현체
+
 
 
