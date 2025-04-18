@@ -45,7 +45,17 @@
 
          @Log4j2 -> log.info(" "); 사용할 수 있음 (sysout)
 
-     2) 경로 임의로 생성 
+
+     2) Injection(주입)
+         - @Controller, @Service, @Component 을 통해서 생성된 객체를 언제, 어디에 사용할 것인지를 알려주는 개념
+         - @Autowired 를 필요한 객체 위에 작성(컨테이너가 관리하는 객체를 주입해 주세요)
+
+            @Autowired                                 클래스에 @RequiredArgsConstructor 붙이기 
+            private MemoService MemoService;        == private final MemoService MemoService
+
+
+
+     3) 경로 임의로 생성 
          http://localhost:8080/ ==> Controller 파일의 메소드와 매핑
 
          - uri 설계
@@ -73,7 +83,7 @@
          http://localhost:8080/board/update -> 브라우저에서 요청 => 컨트롤러 응답 => templates 찾기 (templates / board / update)
              => templates / board / update.html 작성
 
-     3) 내장 서버 : Tomcat(설치 후 사용 - 스프링부트를 사용한다면 내장되어 있음)
+     4) 내장 서버 : Tomcat(설치 후 사용 - 스프링부트를 사용한다면 내장되어 있음)
          http://localhost:8080/ : Tomcat 서버 구동 시 기본경로
 
          브라우저를 통해 http, https 프로토콜에 응답하는 서버 : SW웹서버(apache, NginX)  
@@ -82,7 +92,7 @@
      * a 태그로 들어가는 방식 -> get 방식
          post 들어오면 post매핑을 해야함.
 
-     4) 오류발생
+     5) 오류발생
          - 404 : 컨트롤러 경로 확인
          - 405 : 컨트롤러 경로 + 매핑방식 확인
 
@@ -92,7 +102,7 @@
              <li>아이디 : [[${loginDTO?.userid}]]</li>
              <li>비밀번호 : [[${loginDTO?.password}]]</li>
 
-     5) 사용자 입력값 가져오기
+     6) 사용자 입력값 가져오기
          (1) 변수 이용 : 타입 지정 가능, 변수명은 form 요소의 이름과 일치
          (2) 커맨드(DTO) 객체 이용 : 타입 지정 가능, 변수명은 form 요소의 이름과 일치
                                      커맨드 객체 사용시 장점은 template 페이지까지 입력값이 유지
@@ -100,11 +110,11 @@
                      HttpServleRequest request : 사용자의 정보 및 서버 쪽 정보 추출
 
 
-     6) @ModelAttribute 
+     7) @ModelAttribute 
          - 별칭
          - model.addAttribute("num1", num1) == @ModelAttribute("num1") : template 페이지에서 값을 유지하고 싶다면
 
-     7) RedirectAttributes : 컨트롤러에서 움직이는 방식이 redirect 일 때 사용 / 움직이면서 특정 값을 가지고 가고 싶을 때 사용
+     8) RedirectAttributes : 컨트롤러에서 움직이는 방식이 redirect 일 때 사용 / 움직이면서 특정 값을 가지고 가고 싶을 때 사용
                  - rttr.addAttribute("userid", memberDTO.getUserid()); 
                    rttr.addAttribute("userid", "10");   =>  ?userid=10  => 템플릿 $[param.userid]
 
@@ -115,7 +125,7 @@
              - return "redirect:/member/login";
                      redirect + 주소를 주면 원하는 페이지로 리턴 됨.
 
-     8) 데이터 유지하기 
+     9) 데이터 유지하기 
          - login.html 입력값 => 컨트롤러 => logout.html까지 입력값 유지를 하고싶다면?
              - foward 방식 : 커맨드 객체, ModelAttribute( or @ModelAttribute), Model
              - redirect 방식 : RedirectiAttributes 이용
@@ -222,6 +232,7 @@
 * JPA 
      - ORM(Object Relational Mapping) : 데이터베이스와 객체지향을 한 번에 처리하기 위한 개념
      - Hibernate : jpa 스펙을 구현해 낸 구현체
+
 
 
 
