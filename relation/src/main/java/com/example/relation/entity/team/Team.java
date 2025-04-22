@@ -3,6 +3,7 @@ package com.example.relation.entity.team;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -36,6 +37,7 @@ public class Team {
     private String teamName;
 
     @Builder.Default
-    @OneToMany(mappedBy = "team", fetch = FetchType.EAGER) // 주인관계 알려줘야함. (@ManyToOne 의 변수명)
+    // 주인관계 알려줘야함. (@ManyToOne 의 변수명)
+    @OneToMany(mappedBy = "team", fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private List<TeamMember> members = new ArrayList<>();
 }
