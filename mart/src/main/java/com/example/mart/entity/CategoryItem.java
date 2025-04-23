@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Builder
-@ToString
+@ToString(exclude = { "item", "category" })
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -34,6 +34,6 @@ public class CategoryItem {
     private Category category;
 
     @JoinColumn(name = "ITEM_ID")
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Item item;
 }

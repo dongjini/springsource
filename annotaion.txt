@@ -16,6 +16,7 @@
      4) @ManyToMany : 실제 업무 환경에서는 잘 사용되지 않음
                     : @ManyToOne 관계로 변경 후 사용
                     : FetchType.LAZY 인 상태
+                     - sns 좋아요 같은 느낌
 
 
      - 양방향 관계는 없음 : 단방향 2개를 여는 것
