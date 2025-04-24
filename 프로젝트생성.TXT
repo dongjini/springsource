@@ -32,4 +32,10 @@
 * @Autowired 를 하나하나 안붙이고 @RequiredArgsConstructor를 사용해
       private final TodoService todoService; 사용하면 편리함
 
-제어의 역전 
+<a href="">
+global 속성
+	 class
+	 id
+	 name
+	 data-*
+	 <li class="" id="">
