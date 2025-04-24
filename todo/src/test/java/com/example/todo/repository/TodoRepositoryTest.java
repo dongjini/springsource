@@ -54,9 +54,9 @@ public class TodoRepositoryTest {
     // todo 수정 - 완료
     @Test
     public void testUpdate() {
-        ToDo toDo = todoRepository.findById(2L).get();
-        toDo.setContent("고양이 냥냥펀치");
-        toDo.setCompleted(true);
-        todoRepository.save(toDo);
+        ToDo todo = todoRepository.findById(2L).get();
+        todo.setContent("고양이 냥냥펀치");
+        todo.setCompleted(true);
+        todoRepository.save(todo);
     }
 }
