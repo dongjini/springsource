@@ -239,4 +239,13 @@
      1. RootConfig.java 작성
     
 
+* 수정
+     get -> 수정할 내용 보여주기 (주소줄에 따라가는게 보임)
+     post -> 실제 수정 내용 보내기
 
+
+Caused by: java.lang.IllegalStateException: Ambiguous mapping
+    -> 동일한 포스트, 동일한 경로일때 발생 (메소드명은 중요하지 않음)
+
+* html 에서 오류 발생시 빨강색으로 보여줌
+ <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="text-danger"></div>
