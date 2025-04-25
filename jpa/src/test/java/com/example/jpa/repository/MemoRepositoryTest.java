@@ -22,6 +22,13 @@ public class MemoRepositoryTest {
     @Autowired
     private MemoRepository memoRepository;
 
+    @Test
+    public void queryMethodTest() {
+        // System.out.println(memoRepository.findByMnoLessThan(5L));
+        // System.out.println(memoRepository.findByMnoLessThan(10L));
+        System.out.println(memoRepository.findByMemoTextContaining("~"));
+    }
+
     // test 메소드 작성
     @Test
     public void insertTest() {
