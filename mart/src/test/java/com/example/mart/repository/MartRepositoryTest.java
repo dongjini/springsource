@@ -1,6 +1,8 @@
 package com.example.mart.repository;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
@@ -17,8 +19,8 @@ import com.example.mart.entity.Order;
 import com.example.mart.entity.OrderItem;
 import com.example.mart.entity.constant.DeliveryStatus;
 import com.example.mart.entity.constant.OrderStatus;
+import com.querydsl.jpa.JPQLQuery;
 
-import jakarta.persistence.CascadeType;
 import jakarta.transaction.Transactional;
 
 @SpringBootTest
@@ -326,6 +328,54 @@ public class MartRepositoryTest {
         Category category = categoryRepository.findById(1L).get();
         category.getCategoryItems().forEach(item -> System.out.println(item.getItem()));
 
+    }
+
+    @Transactional
+    @Test
+    public void membersTest() {
+        List<Member> list = orderRepository.members();
+        System.out.println(list);
+    }
+
+    @Test
+    public void itemsTest() {
+        List<Item> list = orderRepository.items();
+        System.out.println(list);
+    }
+
+    @Transactional
+    @Test
+    public void joinTest() {
+        List<Object[]> list = orderRepository.joingTest();
+        for (Object[] objects : list) {
+            // System.out.println(Arrays.toString(objects));
+            Order order = (Order) objects[0];
+            Member member = (Member) objects[1];
+            OrderItem orderItem = (OrderItem) objects[2];
+            System.out.println(order);
+            System.out.println(member);
+            System.out.println(orderItem);
+
+        }
+    }
+
+    @Transactional
+    @Test
+    public void subQueryTest() {
+        List<Object[]> list = orderRepository.subQueryTest();
+        for (Object[] objects : list) {
+            Order order = (Order) objects[0];
+            Member member = (Member) objects[1];
+            OrderItem orderItem = (OrderItem) objects[2];
+            Long orderCnt = (Long) objects[3];
+            Long orderSum = (Long) objects[4];
+
+            System.out.println(order);
+            System.out.println(member);
+            System.out.println(orderItem);
+            System.out.println(orderCnt);
+            System.out.println(orderSum);
+        }
     }
 
 }
