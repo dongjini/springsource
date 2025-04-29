@@ -1,0 +1,9 @@
+Board - bno(pk), titlem content(Boardtbl)
+
+Member - email(pk), password, name(Board_Member)
+
+Reply - rno(pk), text, replyer
+
+    1           :           N (FK)
+한명의 멤버는 여러개의 게시글 작성
+하나의 게시글에는 여러개의 댓글 작성

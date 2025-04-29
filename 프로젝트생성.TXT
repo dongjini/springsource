@@ -46,6 +46,7 @@
 4. modelmapper 사용을 위해 config 파일 작성
 5. BaseEntity 작성
 6. main 클래스 위에 @EnableJpaAuditing 추가
+7. querydsl 설정
 
 ------------------------------------------------------------------------
 

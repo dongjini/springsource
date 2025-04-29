@@ -1,0 +1,30 @@
+package com.example.board.entity;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+@Entity
+@ToString
+@Builder
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "BOARD_MEMBER")
+public class Member extends BaseEntity {
+
+    @Id
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
+    private String name;
+}
