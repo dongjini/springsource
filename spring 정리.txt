@@ -249,3 +249,12 @@ Caused by: java.lang.IllegalStateException: Ambiguous mapping
 
 * html 에서 오류 발생시 빨강색으로 보여줌
  <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="text-danger"></div>
+
+
+
+* 에러
+     404 에러 : 컨트롤러 에러 (경로 확인)
+     500 에러 : 서버 터미널
+
+     js 수정 : 브라우저 콘솔
+     
