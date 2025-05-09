@@ -25,12 +25,19 @@
      - 장점 : 조회 방법이 하나 더 생기는 것
               부서 조회시 부서에 속한 모든 사원 정보 조회
 
-         * FetchType.LAZY 일 때 관련있는 테이블 정보를 접근한다면
-             -> LazyInitializationException 발생
 
-             -> 해결방법 
-                 1) @Transactional 붙인다
-                 2) FetchType 변경 : FetchType.EAGER(즉시) 관계있는 테이블 정보를 즉시 가지고 나오기 -> left join
+* FetchType.LAZY 일 때 관련있는 테이블 정보를 접근한다면
+     -> LazyInitializationException 발생
+
+     -> 해결방법 
+         1) @Transactional : select 구문 2개로 처리
+                 => left join 구문으로 처리하려먼
+                 => @EntityGraph(attributePaths = { "roleSet" }, type = EntityGraphType.LOAD)
+         2) FetchType 변경 : 
+                 FetchType.EAGER(즉시) 관계있는 테이블 정보를 즉시 가지고 나오기 -> left join
+
+
+
 
 * 프록시(Proxy) : 프록시를 통해 연관된 객체를 실제 사용하는 시점에 데이터베이스에서 조회하도록 함(지연로딩)
                   자주 함께 사용하는 객체들은 조인을 통해서 함께 조회(즉시 로딩)
