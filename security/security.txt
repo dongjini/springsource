@@ -31,3 +31,7 @@ spring security
 * 소셜계정 처리를 
      => 테이블 저장
         email,pw
+
+
+- 403 에러
+     csrf 값 확인 : form action 값 적었는지 확인
