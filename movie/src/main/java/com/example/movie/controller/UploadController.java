@@ -2,6 +2,7 @@ package com.example.movie.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,6 +31,7 @@ import com.example.movie.dto.UploadResultDTO;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @Log4j2
@@ -91,13 +93,18 @@ public class UploadController {
     }
 
     @GetMapping("/display")
-    public ResponseEntity<byte[]> getFile(String fileName) {
+    public ResponseEntity<byte[]> getFile(String fileName, String size) {
         // 이미지: 101010 -> 바이트 배열 사용
         ResponseEntity<byte[]> result = null;
 
         try {
             String srcFileName = URLDecoder.decode(fileName, "utf-8");
             File file = new File(uploadPath + File.separator + srcFileName);
+
+            if (size != null && size.equals("1")) {
+                // s_ 제거
+                file = new File(file.getParent(), file.getName().substring(2));
+            }
 
             HttpHeaders headers = new HttpHeaders();
             // Content-Type : 브라우저에게 보내는 파일 타입이 무엇인지 제공할 때 사용
@@ -111,6 +118,29 @@ public class UploadController {
         }
 
         return result;
+
+    }
+
+    @PostMapping("/removeFile")
+    public ResponseEntity<String> postMethodName(String fileName) {
+        log.info("파일 삭제 요청 {}", fileName);
+
+        // 2025/05/16/~~~~
+        String oriFileName;
+        try {
+            oriFileName = URLDecoder.decode(fileName, "utf-8");
+            // 원본 파일 삭제
+            File file = new File(uploadPath + File.separator + oriFileName);
+            file.delete();
+            // 썸네일 삭제
+            File thumbnail = new File(file.getParent(), "s_" + file.getName());
+            thumbnail.delete();
+
+            return new ResponseEntity<>("Success", HttpStatus.OK);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
     }
 
