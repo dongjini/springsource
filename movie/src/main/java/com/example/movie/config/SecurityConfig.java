@@ -26,17 +26,23 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http, RememberMeServices rememberMeServices) throws Exception {
 
         http.authorizeHttpRequests(authorize -> authorize
-                .anyRequest().permitAll());
+                .requestMatchers("/", "/assets/**", "/css/**", "/js/**", "/upload/**").permitAll()
+                .requestMatchers("/movie/list", "/movie/read").permitAll()
+                .requestMatchers("/reviews/**", "/upload/display/**").permitAll()
+                .requestMatchers("/member/register").permitAll()
+                .anyRequest().authenticated());
 
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
 
-        // http.formLogin(login -> login.loginPage("/member/login")
-        // .successHandler(successHandler())
-        // .permitAll());
+        // http.csrf(csrf -> csrf.disable());
 
-        // http.logout(logout -> logout
-        // .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
-        // .logoutSuccessUrl("/"));
+        http.formLogin(login -> login.loginPage("/member/login")
+                .defaultSuccessUrl("/movie/list")
+                .permitAll());
+
+        http.logout(logout -> logout
+                .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
+                .logoutSuccessUrl("/"));
 
         // http.rememberMe(remember -> remember.rememberMeServices(rememberMeServices));
 
