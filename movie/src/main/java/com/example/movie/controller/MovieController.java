@@ -1,6 +1,7 @@
 package com.example.movie.controller;
 
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -24,11 +25,13 @@ public class MovieController {
 
     private final MovieService movieService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/create")
     public void getCreate(PageRequestDTO pageRequestDTO) {
         log.info("영화등록 ");
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public String postCreate(MovieDTO dto, PageRequestDTO pageRequestDTO, RedirectAttributes rttr) {
         log.info("영화등록 요청 {} ", dto);
@@ -44,6 +47,7 @@ public class MovieController {
         return "redirect:/movie/read";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/remove")
     public String deleteMovie(Long mno, PageRequestDTO pageRequestDTO, RedirectAttributes rttr) {
         log.info("영화 삭제 {]", mno);

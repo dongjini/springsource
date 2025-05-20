@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +48,7 @@ public class UploadController {
         return "/upload/test";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/files")
     public ResponseEntity<List<UploadResultDTO>> postUpload(MultipartFile[] uploadFiles) {
 
@@ -121,6 +123,7 @@ public class UploadController {
 
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/removeFile")
     public ResponseEntity<String> postMethodName(String fileName) {
         log.info("파일 삭제 요청 {}", fileName);
