@@ -17,25 +17,33 @@ import com.example.novels.entity.Novel;
 import com.example.novels.repository.GradeRepository;
 import com.example.novels.repository.NovelRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
-@Service
 @Log4j2
 @RequiredArgsConstructor
+@Service
 public class NovelService {
 
     private final NovelRepository novelRepository;
     private final GradeRepository gradeRepository;
 
     public Long avaUpdate(NovelDTO novelDTO) {
-
         // available 변경
         Novel novel = novelRepository.findById(novelDTO.getId()).get();
+        novel.changeAvailable(novelDTO.isAvailable());
         return novelRepository.save(novel).getId();
-
     }
 
+    public Long pubUpdate(NovelDTO novelDTO) {
+        // publishedDate 변경
+        Novel novel = novelRepository.findById(novelDTO.getId()).get();
+        novel.changePublishedDate(novelDTO.getPublishedDate());
+        return novelRepository.save(novel).getId();
+    }
+
+    @Transactional
     public void novelRemove(Long id) {
         // 자식에 해당하는 grade 삭제
         gradeRepository.deleteByNovel(Novel.builder().id(id).build());
@@ -54,15 +62,13 @@ public class NovelService {
                 .available(novelDTO.isAvailable())
                 .genre(Genre.builder().id(novelDTO.getGid()).build())
                 .build();
-
         return novelRepository.save(novel).getId();
-
     }
 
     public PageResultDTO<NovelDTO> getList(PageRequestDTO pageRequestDTO) {
         Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize(),
                 Sort.by("id").descending());
-        Page<Object[]> result = novelRepository.list(pageable);
+        Page<Object[]> result = novelRepository.list(pageRequestDTO.getGenre(), pageRequestDTO.getKeyword(), pageable);
 
         // entity => dto
         List<NovelDTO> dtoList = result.get().map(arr -> {
@@ -81,12 +87,12 @@ public class NovelService {
                     .rating(rating != null ? rating.intValue() : 0)
                     .build();
             return novelDTO;
+
         }).collect(Collectors.toList());
 
         long totalCount = result.getTotalElements();
         return PageResultDTO.<NovelDTO>withAll().dtoList(dtoList).totalCount(totalCount).pageRequestDTO(pageRequestDTO)
                 .build();
-
     }
 
     public NovelDTO getRow(Long id) {
@@ -97,7 +103,6 @@ public class NovelService {
         Double avgGrade = (Double) result[2];
         NovelDTO dto = entityToDto(novel, genre, avgGrade);
         return dto;
-
     }
 
     private NovelDTO entityToDto(Novel novel, Genre genre, Double rating) {
@@ -112,6 +117,6 @@ public class NovelService {
                 .rating(rating != null ? rating.intValue() : 0)
                 .build();
         return novelDTO;
-
     }
+
 }
